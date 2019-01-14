@@ -1,0 +1,20 @@
+{
+
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 1453
+        }
+      ],
+      "UpstreamPathTemplate": "/Wm",
+      "UpstreamHttpMethod": [],
+      "QoSOptions": {
+        "TimeoutValue": 110000
+      }
+    }
+  ]
+}
