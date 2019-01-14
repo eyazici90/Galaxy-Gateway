@@ -1,2 +1,2 @@
 # Galaxy-Gateway
-API Gateway
+Next generation API Gateway based on Galaxy framework
