@@ -1,6 +1,6 @@
 
 # Galaxy-Gateway
-Next generation API Gateway based on Galaxy framework
+Next generation API Gateway based on Galaxy&Ocelot 
 
 
 ## Big Picture
