@@ -1,4 +1,5 @@
 
+
 # Galaxy-Gateway
 Next generation API Gateway based on Galaxy&Ocelot 
 
@@ -11,7 +12,6 @@ Next generation API Gateway based on Galaxy&Ocelot
 .Net Core 2.2
 
 ## Benefits
-
  - Request Response Logging
  - Circuit Breaker pattern implemantations
  - Tracking requests by correlationId
@@ -22,4 +22,6 @@ Next generation API Gateway based on Galaxy&Ocelot
  - Global exception logging from downstream
  - Authentication by jwt
  - Aggregation on downstreams
+ - CQRS implementations
+
  
