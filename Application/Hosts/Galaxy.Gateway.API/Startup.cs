@@ -28,6 +28,7 @@ using Galaxy.Gateway.Services.Contracts;
 using Galaxy.Gateway.Shared;
 using Galaxy.Gateway.Shared.Commands;
 using Serilog;
+using Galaxy.Gateway.API.Aggregator;
 
 namespace Galaxy.Gateway.API
 {
@@ -54,7 +55,8 @@ namespace Galaxy.Gateway.API
 
             services.AddOptions(); 
 
-            services.AddOcelot(Configuration);
+            services.AddOcelot(Configuration)
+                .AddTransientDefinedAggregator<GalaxyGatewayAggregator>();
 
             var container = this.ConfigureGalaxy(services);
 

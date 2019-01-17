@@ -14,7 +14,34 @@
       "UpstreamHttpMethod": [],
       "QoSOptions": {
         "TimeoutValue": 110000
-      }
+      },
+      "Key": "Mock1"
+    },
+    {
+      "DownstreamPathTemplate": "/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9091
+        }
+      ],
+      "UpstreamPathTemplate": "/Mm",
+      "UpstreamHttpMethod": [],
+      "QoSOptions": {
+        "TimeoutValue": 110000
+      },
+      "Key": "Mock2"
+    }
+  ],
+  "Aggregates": [
+    {
+      "ReRouteKeys": [
+        "Mock1",
+        "Mock2"
+      ],
+      "UpstreamPathTemplate": "/aggregate",
+      "Aggregator": "GalaxyGatewayAggregator"
     }
   ]
 }
