@@ -12,6 +12,7 @@ Next generation API Gateway based on Galaxy&Ocelot
 .Net Core 2.2
 
 ## Benefits
+ - Async await first
  - Request Response Logging
  - Circuit Breaker pattern implemantations
  - Tracking requests by correlationId
