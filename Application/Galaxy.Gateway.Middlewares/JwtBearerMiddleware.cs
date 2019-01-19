@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Galaxy.Gateway.Shared;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,18 +22,46 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            //TokenValidationParameters validationParameters =
-            //        new TokenValidationParameters
-            //        {
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("Pgw13213-rqwe21wdasdfqweqwdasdfqkıhjewıowhorıo"))
-            //        };
-
-            //SecurityToken validatedToken;
-            //JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            //var user = handler.ValidateToken("eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1N0RBRTRBMzU5NDhGODhBQTg2NThFQkExMUZFOUIxMkI5Qzk5NjIiLCJ0eXAiOiJKV1QifQ.eyJ1bmlxdWVfbmFtZSI6IkJvYkBDb250b3NvLmNvbSIsIkFzcE5ldC5JZGVudGl0eS5TZWN1cml0eVN0YW1wIjoiM2M4OWIzZjYtNzE5Ni00NWM2LWE4ZWYtZjlmMzQyN2QxMGYyIiwib2ZmaWNlIjoiMjAiLCJqdGkiOiI0NTZjMzc4Ny00MDQwLTQ2NTMtODYxZi02MWJiM2FkZTdlOTUiLCJ1c2FnZSI6ImFjY2Vzc190b2tlbiIsInNjb3BlIjpbImVtYWlsIiwicHJvZmlsZSIsInJvbGVzIl0sInN1YiI6IjExODBhZjQ4LWU1M2ItNGFhNC1hZmZlLWNmZTZkMjU4YWU2MiIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMS8iLCJuYmYiOjE0Nzc1MDkyNTQsImV4cCI6MTQ3NzUxMTA1NCwiaWF0IjoxNDc3NTA5MjU0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAvIn0.Lmx6A3jhwoyZ8KAIkjriwHIOAYkgXYOf1zBbPbFeIiU2b-2-nxlwAf_yMFx3b1Ouh0Bp7UaPXsPZ9g2S0JLkKD4ukUa1qW6CzIDJHEfe4qwhQSR7xQn5luxSEfLyT_LENVCvOGfdw0VmsUO6XT4wjhBNEArFKMNiqOzBnSnlvX_1VMx1Tdm4AV5iHM9YzmLDMT65_fBeiekxQNPKcXkv3z5tchcu_nVEr1srAk6HpRDLmkbYc6h4S4zo4aPcLeljFrCLpZP-IEikXkKIGD1oohvp2dpXyS_WFby-dl8YQUHTBFHqRHik2wbqTA_gabIeQy-Kon9aheVxyf8x6h2_FA"
-            //    , validationParameters, out validatedToken);
-            
+            if (ShouldValidateJwt(context))
+            {
+                HandleJwtRequest(context);
+            }
             await _next(context);
         }
+
+        private void HandleJwtRequest(HttpContext context)
+        {
+            // Todo: Enviroumentea çekilecek!!! 
+            TokenValidationParameters validationParameters =
+                    new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.GATEWAY_SECRET_KEY))
+                    };
+
+            SecurityToken validatedToken;
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+
+            var jwtToken = GetBearerTokenFromRequestHeader(context);
+
+            handler.ValidateToken(jwtToken
+                , validationParameters, out validatedToken);
+
+            if (validatedToken == null)
+                throw new Exception($"Bearer token is not validated !!!");
+        }
+
+        private string GetBearerTokenFromRequestHeader(HttpContext context) =>
+            context.Request.Headers.Where(h=>h.Key == "Authorization").SingleOrDefault()
+                .Value.ToString()
+                .Replace("Bearer",string.Empty).Replace("bearer", string.Empty)
+                .Trim();
+
+        private bool ShouldValidateJwt(HttpContext context) =>
+             Settings.IS_JWT_AUTH_ENABLED && context.Request.Headers.Keys.Any(k => k == "Authorization");
     }
 }

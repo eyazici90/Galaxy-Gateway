@@ -26,5 +26,10 @@ namespace Galaxy.Gateway.Shared
         public static int EXCEPTION_ALLOWED_BEFORE_BREAKING { get; } = 3;
 
         public static int CIRCUIT_BREAKER_OPEN_STATE_DURATION_SECONDS { get; } = 10;
+
+        public static bool IS_JWT_AUTH_ENABLED { get; } = true;
+
+        public static string GATEWAY_SECRET_KEY { get; } = $"IdentityAPIseckey2017!.#";
+
     }
 }

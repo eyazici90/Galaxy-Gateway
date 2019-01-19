@@ -32,7 +32,24 @@
         "TimeoutValue": 110000
       },
       "Key": "Mock2"
+    },
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/Identity/{everything}",
+      "UpstreamHttpMethod": [],
+      "QoSOptions": {
+        "TimeoutValue": 110000
+      },
+      "Key": "Identity"
     }
+
   ],
   "Aggregates": [
     {
