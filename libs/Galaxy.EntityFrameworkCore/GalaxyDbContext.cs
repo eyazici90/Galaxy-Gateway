@@ -159,17 +159,17 @@ namespace Galaxy.EFCore
              return changesAsync;
         }
 
-        public void SyncObjectState<TEntity>(TEntity entity) where TEntity : class, IObjectState
+        public virtual void SyncObjectState<TEntity>(TEntity entity) where TEntity : class, IObjectState
         {
             Entry(entity).State = StateHelper.ConvertState(entity.ObjectState);
         }
 
-        public void SyncEntityState<TEntity>(TEntity entity) where TEntity : class, IObjectState
+        public virtual void SyncEntityState<TEntity>(TEntity entity) where TEntity : class, IObjectState
         {
             entity.SyncObjectState(StateHelper.ConvertState(Entry(entity).State));
         }
 
-        private void SyncObjectsStatePreCommit()
+        public virtual void SyncObjectsStatePreCommit()
         {
             // Todo: precommit performing actions
             //foreach (var dbEntityEntry in ChangeTracker.Entries())
@@ -178,45 +178,47 @@ namespace Galaxy.EFCore
             //}
         }
 
-        public void SyncObjectsAuditPreCommit (IAppSessionContext session)
+        public virtual void SyncObjectsAuditPreCommit(IAppSessionContext session)
         {
-            if (!ChangeTracker.Entries().Any(x => x.Entity is IAudit))
+            if (!ChangeTracker.Entries().Any(e => (e.Entity is IAudit)))
                 return;
+
             foreach (var dbEntityEntry in ChangeTracker.Entries<IAudit>())
             {
-                    var entity = (dbEntityEntry.Entity);
+                var entity = (dbEntityEntry.Entity);
 
-                    if ((dbEntityEntry.State)== EntityState.Added)
+                if ((dbEntityEntry.State) == EntityState.Unchanged)
+                    continue;
+
+                if ((dbEntityEntry.State) == EntityState.Added)
+                {
+                    if (typeof(IMultiTenant).IsAssignableFrom(entity.GetType()))
                     {
-                        if (typeof(IFullyAudit).IsAssignableFrom(entity.GetType()))
-                        {
-                            (entity as IFullyAudit)
-                                .SyncAuditState(creatorUserId: session.UserId, tenantId: session.TenantId, creationTime: DateTime.Now);
-                        }
-                        else
-                        {
-                            entity.SyncAuditState(creatorUserId: session.UserId, creationTime: DateTime.Now);
-                        } 
+                        ApplyTenantState(entity as IMultiTenant, session);
+                        ApplyCreatedAuditState(entity, session);
                     }
                     else
                     {
-                        if (typeof(IFullyAudit).IsAssignableFrom(entity.GetType()))
-                        {
-                            (entity as IFullyAudit)
-                                .SyncAuditState(lastmodifierUserId: session.UserId, tenantId: session.TenantId, lastModificationTime: DateTime.Now
-                              , creatorUserId: entity.CreatorUserId, creationTime: entity.CreationTime);
-                        }
-                        else
-                        {
-                            entity.SyncAuditState(lastmodifierUserId: session.UserId, lastModificationTime: DateTime.Now
-                              , creatorUserId: entity.CreatorUserId, creationTime: entity.CreationTime);
-                        }
-                         
+                        ApplyCreatedAuditState(entity, session);
                     }
+                }
+                else
+                {
+                    if (typeof(IMultiTenant).IsAssignableFrom(entity.GetType()))
+                    {
+                        ApplyTenantState(entity as IMultiTenant, session);
+                        ApplyUpdatedAuditState(entity, session);
+                    }
+                    else
+                    {
+                        ApplyUpdatedAuditState(entity, session);
+                    }
+
+                }
             }
         }
 
-        public void SyncObjectsStatePostCommit()
+        public virtual void SyncObjectsStatePostCommit()
         {
             foreach (var dbEntityEntry in ChangeTracker.Entries())
             {
@@ -224,7 +226,22 @@ namespace Galaxy.EFCore
             }
         }
 
-        public async Task DispatchNotificationsAsync(IMediator mediator)
+        private void ApplyCreatedAuditState(IAudit entity, IAppSessionContext session)
+        {
+            entity.SyncAuditState(creatorUserId: session.UserId, creationTime: DateTime.Now);
+        }
+
+        private void ApplyUpdatedAuditState(IAudit entity, IAppSessionContext session)
+        {
+            entity.SyncAuditState(lastmodifierUserId: session.UserId, lastModificationTime: DateTime.Now
+                              , creatorUserId: entity.CreatorUserId, creationTime: entity.CreationTime);
+        }
+        private void ApplyTenantState(IMultiTenant entity, IAppSessionContext session)
+        {
+            entity.SyncTenantState(session.TenantId);
+        }
+
+        public virtual async Task DispatchNotificationsAsync(IMediator mediator)
         {
             var notifications = ChangeTracker
                 .Entries<IEntity>()
