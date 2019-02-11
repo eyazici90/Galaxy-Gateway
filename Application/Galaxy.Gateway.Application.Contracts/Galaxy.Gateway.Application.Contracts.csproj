@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\Galaxy\Galaxy.csproj" />
     <ProjectReference Include="..\..\Shared\Galaxy.Gateway.Shared\Galaxy.Gateway.Shared.csproj" />
   </ItemGroup>
 

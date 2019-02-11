@@ -7,10 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.104" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Galaxy\Galaxy.csproj" />
+    <PackageReference Include="Galaxy" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
