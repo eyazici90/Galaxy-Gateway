@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Galaxy.Gateway.Shared
 {
-    public static class Settings
+    public static class SettingConsts
 
     {
         public static string PGW_CORRELATION_ID { get; } = $"PGW-Correlation-Id";

@@ -39,9 +39,9 @@ namespace Galaxy.Gateway.API
             var cfgBuilder = new ConfigurationBuilder();
 
             cfgBuilder.SetBasePath(env.ContentRootPath);
-            cfgBuilder.AddJsonFile(path: Settings.PGW_APPSETTINGS_PATH 
+            cfgBuilder.AddJsonFile(path: SettingConsts.PGW_APPSETTINGS_PATH 
                 ,optional: false, reloadOnChange: true);
-            cfgBuilder.AddJsonFile(path: Path.Combine(Settings.PGW_CONFIGURATION_DIRECTORY , Settings.PGW_CONFIGURATION_PATH)
+            cfgBuilder.AddJsonFile(path: Path.Combine(SettingConsts.PGW_CONFIGURATION_DIRECTORY , SettingConsts.PGW_CONFIGURATION_PATH)
                 ,optional: false, reloadOnChange: true);
            
             Configuration = cfgBuilder.Build(); 
@@ -132,16 +132,16 @@ namespace Galaxy.Gateway.API
         private void ConfigureMiddlewares(IApplicationBuilder app)
         {
             app.UseMiddleware<HttpGlobalExceptionMiddleware>();
+            app.UseMiddleware<CorrelationIdMiddleware>();
             app.UseMiddleware<BlackListingMiddleware>();
             app.UseMiddleware<HealthCheckMiddleware>();
-            app.UseMiddleware<CorrelationIdMiddleware>();
             app.UseMiddleware<CircuitBreakerMiddleware>();
             app.UseMiddleware<IdempotencyMiddleware>();
             app.UseMiddleware<LogMiddleware>();
             app.UseMiddleware<HttpRequestValidationMiddleware>();
             app.UseMiddleware<CachingMiddleware>();
-            app.UseMiddleware<JwtBearerMiddleware>();            
-            app.UseMiddleware<OcelotResponderMiddleware>(); 
+            app.UseMiddleware<JwtBearerMiddleware>();
+            app.UseMiddleware<OcelotResponderMiddleware>();
         }
         #endregion
 

@@ -13,11 +13,11 @@ namespace Galaxy.Gateway.Application.Services
 {
     public class ResilenceService : IResilenceService
     {
-        private static CircuitBreakerPolicy _circuitBreaker =  Policy
-             .Handle<Exception>() 
+        private static AsyncCircuitBreakerPolicy _circuitBreaker = Policy
+             .Handle<Exception>()
              .CircuitBreakerAsync(
-                 exceptionsAllowedBeforeBreaking: Settings.EXCEPTION_ALLOWED_BEFORE_BREAKING,
-                 durationOfBreak: TimeSpan.FromSeconds(Settings.CIRCUIT_BREAKER_OPEN_STATE_DURATION_SECONDS)
+                 exceptionsAllowedBeforeBreaking: SettingConsts.EXCEPTION_ALLOWED_BEFORE_BREAKING,
+                 durationOfBreak: TimeSpan.FromSeconds(SettingConsts.CIRCUIT_BREAKER_OPEN_STATE_DURATION_SECONDS)
              );
 
         private readonly IMediator _mediatr;
@@ -36,7 +36,7 @@ namespace Galaxy.Gateway.Application.Services
         {
             command.CircuitBreaker = _circuitBreaker;
             await _mediatr.Send(command);
-        } 
-       
+        }
+
     }
 }

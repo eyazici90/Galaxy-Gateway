@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace Galaxy.Gateway.Middlewares
 {
@@ -28,10 +29,10 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Headers.Keys.Any(k => k.Trim() == Settings.PGW_IDEMPOTANCY_HEADER))
+            if (context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.PGW_IDEMPOTANCY_HEADER))
             {
-                var cacheKey = context.Request.Headers[Settings.PGW_IDEMPOTANCY_HEADER].SingleOrDefault();
-                
+                var cacheKey = context.Request.Headers[SettingConsts.PGW_IDEMPOTANCY_HEADER].SingleOrDefault();
+
                 var cacheValue = await this._cacheService.GetCacheValueByKey(new GetCacheValueByKeyQuery(cacheKey));
                 if (cacheValue == null)
                 {
@@ -39,8 +40,15 @@ namespace Galaxy.Gateway.Middlewares
                 }
                 else
                 {
-                    await context.Response.WriteAsync(this._serializer.Serialize(cacheValue));
-                    return;
+                    context.Response.Clear();
+
+                    context.Response.OnStarting(async () => {
+
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        context.Response.ContentType = "application/json";
+
+                        await context.Response.WriteAsync(this._serializer.Serialize(cacheValue));
+                    });
                 }
             }
             await _next(context);

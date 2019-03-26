@@ -27,9 +27,9 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Headers.Keys.Any(k=>k.Trim() == Settings.PGW_CACHE_HEADER))
+            if (CheckIfCachedRequest(context))
             {
-                var cacheKey =  context.Request.Headers[Settings.PGW_CACHE_HEADER].SingleOrDefault();
+                var cacheKey = context.Request.Headers[SettingConsts.PGW_CACHE_HEADER].SingleOrDefault();
                 var cacheValue = await this.FormatRequest(context.Request);
 
                 await this._cacheService.AddToCache(new AddValueToCacheCommand
@@ -41,6 +41,9 @@ namespace Galaxy.Gateway.Middlewares
 
             await _next(context);
         }
+
+        private bool CheckIfCachedRequest(HttpContext context) =>
+            context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.PGW_CACHE_HEADER);
 
         private async Task<string> FormatRequest(HttpRequest request)
         {

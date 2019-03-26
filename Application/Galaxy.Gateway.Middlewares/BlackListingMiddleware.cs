@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Galaxy.Gateway.Shared.Exceptions;
 
 namespace Galaxy.Gateway.Middlewares
 { 
@@ -31,15 +32,9 @@ namespace Galaxy.Gateway.Middlewares
             var isIpInblackList = await _blackListService.IsIpInBlackList(new BlackListByIpQuery(host));
 
             if (isIpInblackList)
-            {
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync( this._serializer.Serialize(new
-                {
-                    Result = $"IP : {host} is in BlackList!"
-                }));
-            }
-            else
-                await _next(context);
+                throw new BlackListErrorException(host);
+
+            await _next(context);
         }
     }
 }

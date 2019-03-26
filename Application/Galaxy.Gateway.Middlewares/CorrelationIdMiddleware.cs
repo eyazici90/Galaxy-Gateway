@@ -20,7 +20,7 @@ namespace Galaxy.Gateway.Middlewares
         {
             var correlationId = Guid.NewGuid().ToString();
 
-            context.Response.Headers.Add(Settings.PGW_CORRELATION_ID , correlationId);
+            context.Response.Headers.Add(SettingConsts.PGW_CORRELATION_ID , correlationId);
 
             await _next(context);
         }

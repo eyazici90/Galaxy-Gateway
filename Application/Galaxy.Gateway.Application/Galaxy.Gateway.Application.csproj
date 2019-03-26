@@ -5,16 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="7.6.104" />
-    <PackageReference Include="Galaxy.Cache" Version="1.0.1" />
-    <PackageReference Include="Galaxy.Serilog" Version="1.0.1" />
-    <PackageReference Include="Galaxy.Utf8Json" Version="1.0.1" />
-    <PackageReference Include="Polly" Version="6.1.2" />
+    <PackageReference Include="Galaxy.Cache" Version="1.0.2" />
+    <PackageReference Include="Galaxy.FluentValidation" Version="1.0.2" />
+    <PackageReference Include="Galaxy.Serilog" Version="1.0.2" />
+    <PackageReference Include="Galaxy.Utf8Json" Version="1.0.2" />
+    <PackageReference Include="Polly" Version="7.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\Galaxy.FluentValidation\Galaxy.FluentValidation.csproj" />
-    <ProjectReference Include="..\..\libs\Galaxy.Resilence\Galaxy.Resilence.csproj" />
     <ProjectReference Include="..\Galaxy.Gateway.Application.Contracts\Galaxy.Gateway.Application.Contracts.csproj" />
   </ItemGroup>
 

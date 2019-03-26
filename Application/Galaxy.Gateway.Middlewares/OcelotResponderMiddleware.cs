@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Galaxy.Gateway.Shared.Exceptions;
 
 namespace Galaxy.Gateway.Middlewares
 {
@@ -28,11 +29,11 @@ namespace Galaxy.Gateway.Middlewares
 
             var responseStatusCode = context.Response.StatusCode.ToString();
 
-            if (responseStatusCode.StartsWith("4") 
+            if (responseStatusCode.StartsWith("4")
                 || responseStatusCode.StartsWith("5"))
             {
-               throw new Exception($"DownStream Path returned {responseStatusCode} Server Error");     
-            } 
+                throw new DownStreamErrorException(responseStatusCode);
+            }
         }
     }
 }

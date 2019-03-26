@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 namespace Galaxy.Gateway.CommandHandlers
 {
     public class LogCommandHandler : IRequestHandler<LogRequestCommand, bool>
-         , IRequestHandler<LogResponseCommand, bool>
-         , IRequestHandler<LogExceptionByRequestCommand, bool>
+        , IRequestHandler<LogResponseCommand, bool>
+        , IRequestHandler<LogExceptionByRequestCommand, bool>
     {
         private readonly ILog _log;
         public LogCommandHandler(ILog log)
@@ -22,20 +22,20 @@ namespace Galaxy.Gateway.CommandHandlers
 
         public async Task<bool> Handle(LogRequestCommand request, CancellationToken cancellationToken)
         {
-            _log.Information(request.Body);
-            return true;
+            _log.Information($"CorrelationId : {request.CorrelationId} Body : {request.Body}");
+            return await Task.FromResult(true);
         }
 
         public async Task<bool> Handle(LogResponseCommand request, CancellationToken cancellationToken)
         {
-            _log.Information(request.Body);
-            return true;
+            _log.Information($"CorrelationId : {request.CorrelationId} Body : {request.Body}");
+            return await Task.FromResult(true);
         }
 
         public async Task<bool> Handle(LogExceptionByRequestCommand request, CancellationToken cancellationToken)
         {
             _log.Fatal(request.CreatedException, request.CreatedException.Message);
-            return true;
+            return await Task.FromResult(true);
         }
     }
 }

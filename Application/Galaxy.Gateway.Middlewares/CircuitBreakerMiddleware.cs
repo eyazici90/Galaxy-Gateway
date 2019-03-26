@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Galaxy.Gateway.Shared.Exceptions;
 
 namespace Galaxy.Gateway.Middlewares
-{ 
+{
     public class CircuitBreakerMiddleware
     {
         private readonly IResilenceService _resilenceService;
@@ -22,28 +23,14 @@ namespace Galaxy.Gateway.Middlewares
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _resilenceService = resilenceService ?? throw new ArgumentNullException(nameof(resilenceService));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer)) ;
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }
 
         public async Task Invoke(HttpContext context)
         {
             if (this._resilenceService.CheckIfBreakerStateOpened)
             {
-                context.Response.Clear();
-
-                context.Response.OnStarting(async () => {
-
-                    context.Response.StatusCode = (int)HttpStatusCode.OK;
-                    context.Response.ContentType = "application/json";
-
-                    var errorResult = this._serializer.Serialize(
-                            new { Message = $"CircuitBreaker Is Opened !!! LastHandled Exception by CircuitBreaker is: {_resilenceService.LastHandledExceptionByCircuitBreaker.Message}"}
-                            );
-
-                    await context.Response.WriteAsync(errorResult);
-
-                });
-                return;
+                throw new CircuitBreakerOpenedException(_resilenceService.LastHandledExceptionByCircuitBreaker.Message);
             }
 
             var command = new ExecuteThroughCircuitBreakerCommand

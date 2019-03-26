@@ -10,7 +10,7 @@ namespace Galaxy.Gateway.CommandHandlers
     {
         public async Task<bool> Handle(ExecuteThroughCircuitBreakerCommand request, CancellationToken cancellationToken)
         {
-            var circuitBreaker = request.CircuitBreaker as CircuitBreakerPolicy;
+            var circuitBreaker = request.CircuitBreaker as AsyncCircuitBreakerPolicy;
             await circuitBreaker.ExecuteAsync(async () =>
             {
                 await request.Execution();

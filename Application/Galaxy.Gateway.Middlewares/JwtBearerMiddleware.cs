@@ -1,4 +1,5 @@
 ﻿using Galaxy.Gateway.Shared;
+using Galaxy.Gateway.Shared.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
@@ -11,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace Galaxy.Gateway.Middlewares
 {
-   public class JwtBearerMiddleware
+    public class JwtBearerMiddleware
     {
-        private readonly RequestDelegate _next; 
+        private readonly RequestDelegate _next;
 
-        public JwtBearerMiddleware(RequestDelegate next )
+        public JwtBearerMiddleware(RequestDelegate next)
         {
-            _next = next ?? throw new ArgumentNullException(nameof(next)); 
+            _next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
         public async Task Invoke(HttpContext context)
@@ -39,7 +40,7 @@ namespace Galaxy.Gateway.Middlewares
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.GATEWAY_SECRET_KEY))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SettingConsts.GATEWAY_SECRET_KEY))
                     };
 
             SecurityToken validatedToken;
@@ -52,16 +53,17 @@ namespace Galaxy.Gateway.Middlewares
                 , validationParameters, out validatedToken);
 
             if (validatedToken == null)
-                throw new Exception($"Bearer token is not validated !!!");
+                throw new BearerTokenValidationException();
         }
 
         private string GetBearerTokenFromRequestHeader(HttpContext context) =>
-            context.Request.Headers.Where(h=>h.Key == "Authorization").SingleOrDefault()
+            context.Request.Headers.Where(h => h.Key == "Authorization").SingleOrDefault()
                 .Value.ToString()
-                .Replace("Bearer",string.Empty).Replace("bearer", string.Empty)
+                .Replace("Bearer", string.Empty)
+                .Replace("bearer", string.Empty)
                 .Trim();
 
         private bool ShouldValidateJwt(HttpContext context) =>
-             Settings.IS_JWT_AUTH_ENABLED && context.Request.Headers.Keys.Any(k => k == "Authorization");
+             SettingConsts.IS_JWT_AUTH_ENABLED && context.Request.Headers.Keys.Any(k => k == "Authorization");
     }
 }

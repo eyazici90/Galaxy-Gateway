@@ -27,16 +27,16 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Headers.Keys.Any(k => k.Trim() == Settings.PGW_QUEUE_HEADER))
+            if (context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.PGW_QUEUE_HEADER))
             {
-                await _queueService.PublishCommandThroughEventBus( new PublishToQueueThroughEventBusCommand
+                await _queueService.PublishCommandThroughEventBus(new PublishToQueueThroughEventBusCommand
                 {
 
                 });
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(this._serializer.Serialize(new
                 {
-                    Result = $"Request Queued by PGW."
+                    Result = $"Request Queued by Gateway."
                 }));
             }
             await _next(context);

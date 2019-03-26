@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Galaxy.Gateway.Shared;
+using System.Linq;
 
 namespace Galaxy.Gateway.Middlewares
 {
@@ -28,6 +30,7 @@ namespace Galaxy.Gateway.Middlewares
             await this._logService.LogRequest(new LogRequestCommand
             {
                 Url = context.Request.Path,
+                CorrelationId = GetCorrelationIdFromCurrentContext(context),
                 Body = await FormatRequest(context.Request)
             });
 
@@ -42,6 +45,7 @@ namespace Galaxy.Gateway.Middlewares
                 await this._logService.LogResponse(new LogResponseCommand
                 {
                     Url = context.Request.Path,
+                    CorrelationId = GetCorrelationIdFromCurrentContext(context),
                     Body = await FormatResponse(context.Response)
                 });
                 await responseBody.CopyToAsync(originalBodyStream);
@@ -55,7 +59,6 @@ namespace Galaxy.Gateway.Middlewares
                 responseBody.Dispose();
                 context.Response.Body = originalBodyStream;
             }
- 
         }
 
         private async Task<string> FormatRequest(HttpRequest request)
@@ -74,8 +77,12 @@ namespace Galaxy.Gateway.Middlewares
         {
             response.Body.Seek(0, SeekOrigin.Begin);
             var text = await new StreamReader(response.Body).ReadToEndAsync();
-            response.Body.Seek(0, SeekOrigin.Begin); 
+            response.Body.Seek(0, SeekOrigin.Begin);
             return $"Response: {text}";
         }
+
+        private string GetCorrelationIdFromCurrentContext(HttpContext context) =>
+            context.Response?.Headers[SettingConsts.PGW_CORRELATION_ID].SingleOrDefault();
+
     }
 }
