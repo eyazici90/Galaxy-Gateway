@@ -33,10 +33,7 @@ namespace Galaxy.Gateway.Middlewares
                 throw new CircuitBreakerOpenedException(_resilenceService.LastHandledExceptionByCircuitBreaker.Message);
             }
 
-            var command = new ExecuteThroughCircuitBreakerCommand
-            {
-                Execution = async () => await _next(context)
-            };
+            var command = new ExecuteThroughCircuitBreakerCommand(async () => await _next(context));
 
             await this._resilenceService
                 .ExecuteWithCircuitBreakerAsync(command);

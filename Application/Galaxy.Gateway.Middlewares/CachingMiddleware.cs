@@ -32,11 +32,7 @@ namespace Galaxy.Gateway.Middlewares
                 var cacheKey = context.Request.Headers[SettingConsts.PGW_CACHE_HEADER].SingleOrDefault();
                 var cacheValue = await this.FormatRequest(context.Request);
 
-                await this._cacheService.AddToCache(new AddValueToCacheCommand
-                {
-                    CacheKey = cacheKey,
-                    CacheValue = cacheValue
-                });
+                await this._cacheService.AddToCache(new AddValueToCacheCommand(cacheKey, cacheValue, null, null));
             }
 
             await _next(context);

@@ -8,7 +8,13 @@ namespace Galaxy.Gateway.Shared.Commands
 {
     public class ExecuteThroughCircuitBreakerCommand : IRequest<bool>
     {
-        public Func<Task> Execution{ get; set; }
-        public object CircuitBreaker { get; set; }
+        public readonly Func<Task> Execution;
+        public readonly object CircuitBreaker;
+
+        public ExecuteThroughCircuitBreakerCommand(Func<Task> execution, object circuitBreaker = null)
+        {
+            Execution = execution;
+            CircuitBreaker = circuitBreaker;
+        }
     }
 }

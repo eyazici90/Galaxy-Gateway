@@ -7,8 +7,8 @@ namespace Galaxy.Gateway.Shared.Queries
 {
     public class GetLogByIdQuery : IRequest<object>
     {
-        public DateTime? CreationDate { get; private set; }
-        public string Id { get; set; }
+        public readonly DateTime? CreationDate;
+        public readonly string Id;
         public GetLogByIdQuery(string id)
         {
             Id = id;

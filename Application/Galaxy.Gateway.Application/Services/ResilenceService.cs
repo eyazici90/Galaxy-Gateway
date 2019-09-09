@@ -32,11 +32,11 @@ namespace Galaxy.Gateway.Application.Services
         public bool CheckIfBreakerStateOpened =>
             _circuitBreaker.CircuitState == CircuitState.Open;
 
-        public async Task ExecuteWithCircuitBreakerAsync(ExecuteThroughCircuitBreakerCommand command)
-        {
-            command.CircuitBreaker = _circuitBreaker;
-            await _mediatr.Send(command);
-        }
+        public async Task ExecuteWithCircuitBreakerAsync(ExecuteThroughCircuitBreakerCommand command) =>
+            await _mediatr.Send(
+                new ExecuteThroughCircuitBreakerCommand(command.Execution, _circuitBreaker)
+                );
+        
 
     }
 }

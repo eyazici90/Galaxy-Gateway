@@ -7,7 +7,7 @@ namespace Galaxy.Gateway.Shared.Queries
 {
     public class GetCacheValueByKeyQuery : IRequest<object>
     {
-        public string CacheKey { get; private set; }
+        public readonly string CacheKey;
         public GetCacheValueByKeyQuery(string cacheKey)
         {
             this.CacheKey = cacheKey;

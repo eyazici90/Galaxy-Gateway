@@ -7,6 +7,10 @@ namespace Galaxy.Gateway.Shared.Commands
 {
     public class LogExceptionByRequestCommand : IRequest<bool>
     {
-        public Exception CreatedException { get; set; }
+        public readonly Exception CreatedException;
+        public LogExceptionByRequestCommand(Exception createdException)
+        {
+            CreatedException = createdException;
+        }
     }
 }

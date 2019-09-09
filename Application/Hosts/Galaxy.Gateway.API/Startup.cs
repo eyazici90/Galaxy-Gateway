@@ -165,10 +165,7 @@ namespace Galaxy.Gateway.API
                 var errorMsgs = string.Join(",", ctx.Errors);
                 var logServices = app. ApplicationServices.GetService<ILogService>();
                 var ex = new Exception(errorMsgs);
-                await logServices.LogException(new LogExceptionByRequestCommand
-                {
-                    CreatedException = ex
-                });
+                await logServices.LogException(new LogExceptionByRequestCommand(ex));
             }
         }
 
@@ -181,10 +178,7 @@ namespace Galaxy.Gateway.API
 
             foreach (var ip in blackListIps)
             {
-                await blackListServices.AddToBlackList(new AddIPToBlacklistCommand
-                {
-                    ClientIp = ip
-                });
+                await blackListServices.AddToBlackList(new AddIPToBlacklistCommand(ip, null));
             }
         }
     }

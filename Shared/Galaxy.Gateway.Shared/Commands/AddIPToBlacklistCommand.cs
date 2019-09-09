@@ -7,8 +7,13 @@ namespace Galaxy.Gateway.Shared.Commands
 {
     public class AddIPToBlacklistCommand : IRequest<bool>
     {
-        public string ClientIp { get; set; }
+        public readonly string ClientIp;
 
-        public int? BlacklistedDurationSeconds { get; set; }
+        public readonly int? BlacklistedDurationSeconds;
+        public AddIPToBlacklistCommand(string clientIp, int? blacklistedDurationSeconds)
+        {
+            ClientIp = clientIp;
+            BlacklistedDurationSeconds = blacklistedDurationSeconds;
+        }
     }
 }

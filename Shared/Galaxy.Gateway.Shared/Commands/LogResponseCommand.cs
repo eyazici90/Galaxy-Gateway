@@ -7,9 +7,17 @@ namespace Galaxy.Gateway.Shared.Commands
 {
     public class LogResponseCommand : IRequest<bool>
     {
-        public string Headers { get; set; }
-        public string Body { get; set; }
-        public string Url { get; set; }
-        public string CorrelationId { get; set; }
+        public readonly string Headers;
+        public readonly string Body;
+        public readonly string Url;
+        public readonly string CorrelationId;
+        public LogResponseCommand(string headers, string body,
+            string url, string correlationId)
+        {
+            Headers = headers;
+            Body = body;
+            Url = url;
+            CorrelationId = correlationId;
+        }
     }
 }

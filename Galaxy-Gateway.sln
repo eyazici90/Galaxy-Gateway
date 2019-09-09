@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2003
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".libs", ".libs", "{B6224314-D879-49DC-A518-7AFE9BEEFEFF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{65308F98-D329-4001-9EC6-A14CD60BEA4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{E26C51A6-7902-47B6-909F-094A96978C04}"
@@ -48,9 +46,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Galaxy.Fake.API", "Tests\Galaxy.Fake.API\Galaxy.Fake.API.csproj", "{55B72517-050A-4DDF-98F5-0D6FD1B87948}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".benchmarks", ".benchmarks", "{170A2F02-EF2E-408E-9C73-D176FFDEC99C}"
-	ProjectSection(SolutionItems) = preProject
-		Benchmarks\PGW-Main.jmx = Benchmarks\PGW-Main.jmx
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Galaxy.Gateway.Benchmarks", "Benchmarks\Galaxy.Gateway.Benchmarks\Galaxy.Gateway.Benchmarks.csproj", "{D98917F7-F2C8-4BC8-8643-4CC54F71A64E}"
 EndProject

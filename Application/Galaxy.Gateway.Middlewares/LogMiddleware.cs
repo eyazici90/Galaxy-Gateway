@@ -27,12 +27,8 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            await this._logService.LogRequest(new LogRequestCommand
-            {
-                Url = context.Request.Path,
-                CorrelationId = GetCorrelationIdFromCurrentContext(context),
-                Body = await FormatRequest(context.Request)
-            });
+            await this._logService.LogRequest(new LogRequestCommand(string.Empty, await FormatRequest(context.Request), context.Request.Path,
+                 GetCorrelationIdFromCurrentContext(context)));
 
             var originalBodyStream = context.Response.Body;
             var responseBody = new MemoryStream();
@@ -42,12 +38,9 @@ namespace Galaxy.Gateway.Middlewares
 
                 await _next(context);
 
-                await this._logService.LogResponse(new LogResponseCommand
-                {
-                    Url = context.Request.Path,
-                    CorrelationId = GetCorrelationIdFromCurrentContext(context),
-                    Body = await FormatResponse(context.Response)
-                });
+                await this._logService.LogResponse(new LogResponseCommand(string.Empty, await FormatResponse(context.Response), context.Request.Path,
+                     GetCorrelationIdFromCurrentContext(context)));
+
                 await responseBody.CopyToAsync(originalBodyStream);
             }
             catch (Exception)

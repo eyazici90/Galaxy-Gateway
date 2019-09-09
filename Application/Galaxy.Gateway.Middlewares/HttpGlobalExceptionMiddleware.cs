@@ -35,10 +35,7 @@ namespace Galaxy.Gateway.Middlewares
 
             catch (Exception ex)
             {
-                await _logService.LogException(new LogExceptionByRequestCommand
-                {
-                    CreatedException = ex
-                });
+                await _logService.LogException(new LogExceptionByRequestCommand(ex));
 
                 context.Response.Clear();
 

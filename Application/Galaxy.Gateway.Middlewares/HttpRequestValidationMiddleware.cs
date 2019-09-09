@@ -26,12 +26,8 @@ namespace Galaxy.Gateway.Middlewares
         {
             if (context.Request.Method != HttpMethods.Get)
             {
-                await this._reqValidatorService.ValidateRequest(new ValidateRequestCommand
-                {
-                    ContentType = context.Request.ContentType,
-                    Url = context.Request.Path,
-                    Body = await this.FormatRequest(context.Request)
-                });
+                await this._reqValidatorService.ValidateRequest(new ValidateRequestCommand(context.Request.ContentType, string.Empty,
+                    await this.FormatRequest(context.Request), context.Request.Path));
             }
             await _next(context);
         }

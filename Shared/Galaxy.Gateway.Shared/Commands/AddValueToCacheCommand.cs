@@ -7,11 +7,19 @@ namespace Galaxy.Gateway.Shared.Commands
 {
     public class AddValueToCacheCommand : IRequest<bool>
     {
+        public readonly string CacheKey;
+        public readonly string CacheValue;
+        public readonly int? SlidingExpireTime;
+        public readonly int? AbsoluteExpireTime;
 
-        public string CacheKey { get; set; }
-        public string CacheValue { get; set; }
-        public int? SlidingExpireTime { get; set; }
-        public int? AbsoluteExpireTime { get; set; }
+        public AddValueToCacheCommand(string cacheKey, string cacheValue,
+            int? slidingExpireTime, int? absoluteExpireTime)
+        {
+            CacheKey = cacheKey;
+            CacheValue = cacheValue;
+            SlidingExpireTime = slidingExpireTime;
+            AbsoluteExpireTime = absoluteExpireTime;
+        }
 
     }
 }
