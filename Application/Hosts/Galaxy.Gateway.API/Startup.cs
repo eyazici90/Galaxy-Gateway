@@ -39,9 +39,9 @@ namespace Galaxy.Gateway.API
             var cfgBuilder = new ConfigurationBuilder();
 
             cfgBuilder.SetBasePath(env.ContentRootPath);
-            cfgBuilder.AddJsonFile(path: SettingConsts.PGW_APPSETTINGS_PATH 
-                ,optional: false, reloadOnChange: true);
-            cfgBuilder.AddJsonFile(path: Path.Combine(SettingConsts.PGW_CONFIGURATION_DIRECTORY , SettingConsts.PGW_CONFIGURATION_PATH)
+            cfgBuilder.AddJsonFile(path: SettingConsts.GATEWAY_APPSETTINGS_PATH
+                , optional: false, reloadOnChange: true);
+            cfgBuilder.AddJsonFile(path: Path.Combine(SettingConsts.GATEWAY_CONFIGURATION_DIRECTORY, SettingConsts.GATEWAY_CONFIGURATION_PATH)
                 ,optional: false, reloadOnChange: true);
            
             Configuration = cfgBuilder.Build(); 

@@ -12,11 +12,9 @@ namespace Galaxy.Gateway.Application.Services
     public class LogService : ILogService
     {
         private readonly IMediator _mediatr;
-        public LogService(IMediator mediatr)
-        {
+        public LogService(IMediator mediatr)=>
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr)) ;
-        }
-
+         
         public async Task<bool> LogRequest(LogRequestCommand command) =>
             await _mediatr.Send(command);
 

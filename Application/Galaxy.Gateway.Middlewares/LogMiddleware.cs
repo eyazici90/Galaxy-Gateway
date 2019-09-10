@@ -75,7 +75,7 @@ namespace Galaxy.Gateway.Middlewares
         }
 
         private string GetCorrelationIdFromCurrentContext(HttpContext context) =>
-            context.Response?.Headers[SettingConsts.PGW_CORRELATION_ID].SingleOrDefault();
+            context.Response?.Headers[SettingConsts.GATEWAY_CORRELATION_ID].SingleOrDefault();
 
     }
 }

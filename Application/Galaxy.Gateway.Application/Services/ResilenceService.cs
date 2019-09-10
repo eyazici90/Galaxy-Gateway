@@ -21,10 +21,8 @@ namespace Galaxy.Gateway.Application.Services
              );
 
         private readonly IMediator _mediatr;
-        public ResilenceService(IMediator mediatr)
-        {
-            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-        }
+        public ResilenceService(IMediator mediatr)=>
+            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr)); 
 
         public Exception LastHandledExceptionByCircuitBreaker =>
            _circuitBreaker.LastException;

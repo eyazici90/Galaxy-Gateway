@@ -24,7 +24,7 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (!context.Request.Path.Equals(SettingConsts.PGW_HEALTHCHECK_URL, StringComparison.Ordinal))
+            if (!context.Request.Path.Equals(SettingConsts.GATEWAY_HEALTHCHECK_URL, StringComparison.Ordinal))
             {
                 await _next(context);
                 return;

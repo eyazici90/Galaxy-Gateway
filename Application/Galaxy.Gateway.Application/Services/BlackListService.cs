@@ -13,10 +13,9 @@ namespace Galaxy.Gateway.Application.Services
     {
         private readonly IMediator _mediatr;
         
-        public BlackListService(IMediator mediatr)
-        {
+        public BlackListService(IMediator mediatr)=>
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-        }
+        
 
         public async Task<bool> AddToBlackList(AddIPToBlacklistCommand command) =>
             await _mediatr.Send(command);

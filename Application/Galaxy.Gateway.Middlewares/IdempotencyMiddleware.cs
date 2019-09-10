@@ -29,9 +29,9 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.PGW_IDEMPOTANCY_HEADER))
+            if (context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.GATEWAY_IDEMPOTANCY_HEADER))
             {
-                var cacheKey = context.Request.Headers[SettingConsts.PGW_IDEMPOTANCY_HEADER].SingleOrDefault();
+                var cacheKey = context.Request.Headers[SettingConsts.GATEWAY_IDEMPOTANCY_HEADER].SingleOrDefault();
 
                 var cacheValue = await this._cacheService.GetCacheValueByKey(new GetCacheValueByKeyQuery(cacheKey));
                 if (cacheValue == null)

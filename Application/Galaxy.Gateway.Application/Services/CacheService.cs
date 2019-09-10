@@ -12,10 +12,9 @@ namespace Galaxy.Gateway.Application.Services
     public class CacheService : ICacheService
     {
         private readonly IMediator _mediatr;
-        public CacheService(IMediator mediatr)
-        {
+        public CacheService(IMediator mediatr)=>
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-        }
+        
 
         public async Task<bool> AddToCache(AddValueToCacheCommand command) =>
             await _mediatr.Send(command);

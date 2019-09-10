@@ -29,7 +29,7 @@ namespace Galaxy.Gateway.Middlewares
         {
             if (CheckIfCachedRequest(context))
             {
-                var cacheKey = context.Request.Headers[SettingConsts.PGW_CACHE_HEADER].SingleOrDefault();
+                var cacheKey = context.Request.Headers[SettingConsts.GATEWAY_CACHE_HEADER].SingleOrDefault();
                 var cacheValue = await this.FormatRequest(context.Request);
 
                 await this._cacheService.AddToCache(new AddValueToCacheCommand(cacheKey, cacheValue, null, null));
@@ -39,7 +39,7 @@ namespace Galaxy.Gateway.Middlewares
         }
 
         private bool CheckIfCachedRequest(HttpContext context) =>
-            context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.PGW_CACHE_HEADER);
+            context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.GATEWAY_CACHE_HEADER);
 
         private async Task<string> FormatRequest(HttpRequest request)
         {

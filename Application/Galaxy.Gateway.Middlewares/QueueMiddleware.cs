@@ -27,7 +27,7 @@ namespace Galaxy.Gateway.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.PGW_QUEUE_HEADER))
+            if (context.Request.Headers.Keys.Any(k => k.Trim() == SettingConsts.GATEWAY_QUEUE_HEADER))
             {
                 await _queueService.PublishCommandThroughEventBus(new PublishToQueueThroughEventBusCommand
                 {
